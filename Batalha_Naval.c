@@ -1,42 +1,61 @@
 #include <stdio.h>
 
-int main() {
-    char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-    int tabuleiro[10][10];
+#define TAMANHO_TABULEIRO 10
+#define TAMANHO_NAVIO      3
+#define AGUA               0
+#define NAVIO              3
 
-    // Inicializa o tabuleiro com água (0)
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            tabuleiro[i][j] = 0;
-        }
+int main() {
+    char colunas[10] = {'A','B','C','D','E','F','G','H','I','J'};
+    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+
+    // 1) Inicializa o tabuleiro com água
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
+            tabuleiro[i][j] = AGUA;
+
+    // 2) Posiciona navio horizontal em C–E na linha 3
+    int linha = 3, coluna = 2;
+    if (coluna + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++)
+            tabuleiro[linha][coluna + i] = NAVIO;
     }
 
-    // Navio horizontal na linha 3, colunas C, D, E (índices 2, 3, 4)
-    tabuleiro[3][2] = 3;
-    tabuleiro[3][3] = 3;
-    tabuleiro[3][4] = 3;
+    // 3) Posiciona navio vertical em H nas linhas 5–7
+    linha = 5; coluna = 7;
+    if (linha + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++)
+            tabuleiro[linha + i][coluna] = NAVIO;
+    }
 
-    // Navio vertical na coluna H (índice 7), linhas 5, 6, 7
-    tabuleiro[5][7] = 3;
-    tabuleiro[6][7] = 3;
-    tabuleiro[7][7] = 3;
+    // 4) Posiciona navio diagonal principal (descendo para a direita) F0, G1, H2
+    linha = 0; coluna = 5;
+    if (linha + TAMANHO_NAVIO <= TAMANHO_TABULEIRO && coluna + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++)
+            tabuleiro[linha + i][coluna + i] = NAVIO;
+    }
 
-    // Exibir nome do jogo
+    // 5) Posiciona navio diagonal secundária (descendo para a esquerda) F7, E8, D9
+    linha = 7; coluna = 5;
+    if (linha + TAMANHO_NAVIO <= TAMANHO_TABULEIRO && coluna - (TAMANHO_NAVIO - 1) >= 0) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++)
+            tabuleiro[linha + i][coluna - i] = NAVIO;
+    }
+
+    // 6) Imprime o título
     printf("\n-- TABULEIRO BATALHA NAVAL --\n\n");
 
-    // Exibe o cabeçalho das colunas (letras)
+    // 7) Cabeçalho de colunas
     printf("   ");
-    for (int j = 0; j < 10; j++) {
-        printf("%c ", linha[j]);
-    }
+    for (int j = 0; j < TAMANHO_TABULEIRO; j++)
+        printf("%c ", colunas[j]);
     printf("\n");
 
-    // Exibe o tabuleiro
-    for (int i = 0; i < 10; i++) {
-        printf("%d  ", i);
-        for (int j = 0; j < 10; j++) {
+    // 8) Exibe cada linha do tabuleiro
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        printf("%2d ", i);
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
             printf("%d ", tabuleiro[i][j]);
-        }
         printf("\n");
     }
 
